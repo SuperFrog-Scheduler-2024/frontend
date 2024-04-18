@@ -34,6 +34,8 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+
+  --hover-color: var(--highlight-bg);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -60,7 +62,7 @@
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
+  color: var(--text-text);
   background: var(--color-background);
   transition:
     color 0.5s,
