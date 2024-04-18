@@ -1,6 +1,6 @@
 import './assets/main.css'
 
-import 'primevue/resources/themes/aura-light-purple/theme.css'
+import 'primevue/resources/themes/aura-dark-purple/theme.css'
 
 import 'primeicons/primeicons.css'
 
