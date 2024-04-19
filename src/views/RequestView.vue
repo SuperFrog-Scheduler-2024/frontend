@@ -1,5 +1,5 @@
 <template>
     <div>
-        <h1>Request View</h1>
+        <h1>Request a SuperFrog Appearance</h1>
     </div>
 </template>
