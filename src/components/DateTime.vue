@@ -1,25 +1,30 @@
 <template>
-    <div id="request-datetime">
-        <div>
-            <FloatLabel>
-                <Calendar v-model="selectedDate" inputId="event_date" :minDate="minSelectableDate" @input="updateSelectedDate" />
-                <label for="event_date">Event Date</label>
-            </FloatLabel>
+    <div id="datetime">
+        <div id="request-datetime">
+            <div>
+                <FloatLabel>
+                    <Calendar v-model="selectedDate" inputId="event_date" :minDate="minSelectableDate"
+                        @input="updateSelectedDate" />
+                    <label for="event_date">Event Date</label>
+                </FloatLabel>
+            </div>
+            <div>
+                <FloatLabel>
+                    <Calendar v-model="selectedStartTime" timeOnly inputId="event_start_time" :stepMinute="30"
+                        hourFormat="24" @input="updateSelectedStartTime" />
+                    <label for="event_start_time">Event Start Time</label>
+                </FloatLabel>
+            </div>
+            <div>
+                <FloatLabel>
+                    <Calendar v-model="selectedEndTime" timeOnly inputId="event_end_time" :stepMinute="30"
+                        hourFormat="24" @input="updateSelectedEndTime" />
+                    <label for="event_end_time">Event End Time</label>
+                </FloatLabel>
+            </div>
         </div>
-        <div>
-            <FloatLabel>
-                <Calendar v-model="selectedStartTime" timeOnly inputId="event_start_time" :stepMinute="30" hourFormat="24" @input="updateSelectedStartTime" />
-                <label for="event_start_time">Event Start Time</label>
-            </FloatLabel>
-        </div>
-        <div>
-            <FloatLabel>
-                <Calendar v-model="selectedEndTime" timeOnly inputId="event_end_time" :stepMinute="30" hourFormat="24" @input="updateSelectedEndTime" />
-                <label for="event_end_time">Event End Time</label>
-            </FloatLabel>
-        </div>
+        <Button label="Save" :disabled="isNextDisabled" @click="handleNextClick" />
     </div>
-    <Button label="Next" :disabled="isNextDisabled"  @click="handleNextClick" />
 </template>
 
 <script setup lang="ts">
@@ -27,8 +32,6 @@ import { ref, watchEffect, defineEmits } from 'vue';
 import Calendar from 'primevue/calendar';
 import FloatLabel from 'primevue/floatlabel';
 import Button from 'primevue/button';
-
-const emits = defineEmits(['next-step']);
 
 const selectedDate = ref<Date | null>(null);
 const selectedStartTime = ref<Date | null>(null);
@@ -63,8 +66,6 @@ const handleNextClick = () => {
     console.log("Selected Date:", selectedDateValue);
     console.log("Selected Start Time:", adjustedStartTime);
     console.log("Selected End Time:", adjustedEndTime);
-
-    emits('next-step');
 };
 
 // Function to set the time of a date to match another date
@@ -102,5 +103,12 @@ const updateSelectedEndTime = (event: Event) => {
     align-items: center;
     flex-direction: row;
     gap: 1rem;
+}
+
+#datetime {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
 }
 </style>

@@ -1,5 +1,10 @@
+<script setup lang="ts">
+
+
+</script>
+
 <template>
     <div>
-        <h1>Manage Request View</h1>
+        <h1>Manage a SuperFrog Appearance</h1>
     </div>
 </template>
