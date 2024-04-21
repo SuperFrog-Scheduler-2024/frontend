@@ -16,11 +16,11 @@ import Button from 'primevue/button';
 
         <div class="wrapper">
             <nav>
-                <RouterLink to="/">Home</RouterLink>
-                <RouterLink to="/pricing">Pricing</RouterLink>
-                <RouterLink to="/range">Range</RouterLink>
-                <RouterLink to="/request">Request</RouterLink>
-                <RouterLink to="/manage">Manage</RouterLink>
+                <RouterLink to="/" activeClass="active">Home</RouterLink>
+                <RouterLink to="/pricing" activeClass="active">Pricing</RouterLink>
+                <RouterLink to="/range" activeClass="active">Range</RouterLink>
+                <RouterLink to="/request" activeClass="active">Request</RouterLink>
+                <RouterLink to="/manage" activeClass="active">Manage</RouterLink>
                 <Button icon="pi pi-user" text raised rounded aria-label="User" />
             </nav>
         </div>
@@ -67,8 +67,8 @@ nav a {
     color: var(--color-text);
 }
 
-nav a.router-link-exact-active {
-    color: var(--color-text);
+nav a.active {
+    color: var(--primary-color);
 }
 
 nav a:first-of-type {

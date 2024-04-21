@@ -32,7 +32,7 @@ function handleLinkHover(link: Link) {
                 <div class="links">
                     <div v-for="link in links" :key="link.name" class="link-box" @mouseover="handleLinkHover(link)"
                         @mouseleave="hoveredLink = null">
-                        <RouterLink to="{{link.url}}">{{ link.name }}</RouterLink>
+                        <RouterLink :to="link.url">{{ link.name }}</RouterLink>
                     </div>
                 </div>
                 <div class="info-box">
