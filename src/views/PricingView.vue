@@ -19,7 +19,7 @@
             </DataTable>
         </section>
 
-        <section class="general-terms">
+        <section v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }" class="general-terms">
             <h2>General Terms:</h2>
             <ul>
                 <li>Requests must be submitted at least 14 days prior to event date.</li>
@@ -33,14 +33,14 @@
             </ul>
         </section>
 
-        <section class="contact-terms">
+        <section v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }" class="contact-terms">
             <h2>Contact Terms:</h2>
             <p>Unless otherwise specified, the contact provided and their information will also serve as our Spirit
                 Squad member’s point-of-contact on the date of the event.</p>
             <p>List the address and all other necessary information on the booking site.</p>
         </section>
 
-        <section class="event-terms">
+        <section v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }" class="event-terms">
             <h2>Event terms:</h2>
             <ul>
                 <li>Submission of a request does not guarantee the event will be accepted. TCU Spirit has until 5 days
@@ -55,7 +55,7 @@
             </ul>
         </section>
 
-        <section class="transportation-terms">
+        <section v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }" class="transportation-terms">
             <h2>Transportation Terms:</h2>
             <ul>
                 <li>Must include mileage if location is more than 2 miles from TCU and include any parking
@@ -67,7 +67,7 @@
             </ul>
         </section>
 
-        <section class="payment-terms">
+        <section v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }" class="payment-terms">
             <h2>Payment Terms:</h2>
             <ul>
                 <li>All appearances are paid. We do not offer volunteer appearances.</li>
@@ -107,6 +107,10 @@ const spiritFees = ref([
 </script>
 
 <style scoped>
+main * {
+    animation-duration: 1s;
+}
+
 .custom-datatable .p-datatable-header,
 .custom-datatable .p-datatable-footer,
 .custom-datatable .p-paginator,

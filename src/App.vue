@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import Button from 'primevue/button';
+import ScrollTop from 'primevue/scrolltop';
 </script>
 
 <template>
@@ -25,8 +26,8 @@ import Button from 'primevue/button';
             </nav>
         </div>
     </header>
-
     <RouterView />
+    <ScrollTop />
 </template>
 
 <style scoped>

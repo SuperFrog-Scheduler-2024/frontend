@@ -2,12 +2,12 @@
     <div id="chosenfeature">
         <div id="request-chosenfeature">
             <div>
-                <Dropdown v-model="selectedFeature" :options="featureOptions" optionLabel="name"
+                <Dropdown v-model="selectedFeatureType" :options="featureOptions" optionLabel="name" @update:model-value="updateSelectedFeatureType"
                     placeholder="Select Feature Type" class="w-full md:w-14rem" />
             </div>
             <div>
-                <SelectButton v-model="selectedOption" :options="options" optionLabel="name" multiple
-                    aria-labelledby="multiple" />
+                <SelectButton v-model="selectedFeatureStaff" :options="staffOptions" optionLabel="name" multiple
+                    @update:model-value="updateSelectedFeatureStaff" aria-labelledby="multiple"  />
             </div>
         </div>
         <div>
@@ -18,24 +18,25 @@
 
             </FloatLabel>
         </div>
-        <Button label="Save" :disabled="isNextDisabled" @click="handleNextClick" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect, defineEmits } from 'vue';
+import { ref, defineEmits } from 'vue';
 import FloatLabel from 'primevue/floatlabel';
-import Button from 'primevue/button';
 import SelectButton from 'primevue/selectbutton';
 import Dropdown from 'primevue/dropdown';
 import Textarea from 'primevue/textarea';
 
-const selectedFeature = ref<string>('');
-const selectedFeatureDescription = ref<string>('');
-const selectedOption = ref<string[]>([]);
-const isNextDisabled = ref(true);
+const emits = defineEmits(['next-step-disabled', 'next-step-enabled', 'update-feature-staff', 'update-feature-type', 'update-feature-description']);
 
-const options = [
+emits('next-step-disabled');
+
+const selectedFeatureType = ref<string>('');
+const selectedFeatureStaff = ref<string[]>([]);
+const selectedFeatureDescription = ref<string>('');
+
+const staffOptions = [
     { name: 'SuperFrog' },
     { name: 'Cheerleaders' },
     { name: 'Showgirls' }
@@ -47,32 +48,25 @@ const featureOptions = [
     { name: 'Private/Residential' }
 ];
 
-watchEffect(() => {
-    isNextDisabled.value = !selectedFeature.value || !selectedFeatureDescription.value;
-});
-
-const handleNextClick = () => {
-    if (!selectedFeature.value || !selectedFeatureDescription.value) {
-        // Ensure all fields are selected
-        return;
-    }
-
-    // Get the selected feature and feature description
-    const selectedFeatureValue = selectedFeature.value;
-    const selectedFeatureDescriptionValue = selectedFeatureDescription.value;
-
-    // Emit the next-step event with the selected feature and feature description
-    // emits['next-step']({ selectedFeature: selectedFeatureValue, selectedFeatureDescription: selectedFeatureDescriptionValue });
+const updateSelectedFeatureType = (event: Event) => {
+    // selectedFeatureType.value = selectedFeatureType.value.name;
+    // console.log(selectedFeatureType.value);
 };
 
-const updateSelectedFeature = (event: Event) => {
-    const value = (event.target as HTMLInputElement).value;
-    selectedFeature.value = value;
+const updateSelectedFeatureStaff = (event: Event) => {
+    // selectedFeatureStaff.value = selectedFeatureStaff.value.map((staff) => staff.name);
+    // console.log(selectedFeatureStaff.value);
 };
 
 const updateSelectedFeatureDescription = (event: Event) => {
-    const value = (event.target as HTMLInputElement).value;
-    selectedFeatureDescription.value = value;
+    // selectedFeatureDescription.value = selectedFeatureDescription.value;
+    // console.log(selectedFeatureDescription.value);
+    if (selectedFeatureType.value && selectedFeatureStaff.value.length > 0 && selectedFeatureDescription.value) {
+        emits('next-step-enabled');
+        emits('update-feature-type', selectedFeatureType.value);
+        emits('update-feature-staff', selectedFeatureStaff.value);
+        emits('update-feature-description', selectedFeatureDescription.value);
+    }
 };
 
 </script>
@@ -81,7 +75,7 @@ const updateSelectedFeatureDescription = (event: Event) => {
 #chosenfeature {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 2rem;
     align-items: center;
 }
 
