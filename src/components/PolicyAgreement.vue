@@ -1,8 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, defineEmits} from 'vue';
 import Checkbox from 'primevue/checkbox';
 
-const checked = ref(false);
+const emits = defineEmits(['next-step-disabled', 'next-step-enabled', 'update-policy-agreement']);
+
+emits('next-step-disabled');
+
+const selectedPolicyAgreement = ref<boolean>(false);
+
+const updateSelectedPolicyAgreement = (value: boolean) => {
+    if (!value) return
+    emits('next-step-enabled');
+    emits('update-policy-agreement', value);
+};
 
 </script>
 
@@ -20,7 +30,7 @@ const checked = ref(false);
                 </ul>
             </div>
             <div id="agree">
-                <Checkbox v-model="checked" :binary="true" inputId="checkbox" />
+                <Checkbox v-model="selectedPolicyAgreement" :binary="true" inputId="checkbox" @update:modelValue="updateSelectedPolicyAgreement" />
                 <label for="checkbox">I agree to the terms & conditions of a TCU Spirit Appearance.</label>
             </div>
         </div>

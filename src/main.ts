@@ -14,11 +14,15 @@ import OpenLayersMap from "vue3-openlayers";
 import App from './App.vue'
 import router from './router'
 
+import AnimateOnScroll from 'primevue/animateonscroll';
+
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue);
 app.use(OpenLayersMap);
+
+app.directive('animateonscroll', AnimateOnScroll);
 
 app.mount('#app')
