@@ -33,6 +33,11 @@ const router = createRouter({
         path: '/manage/:id',
         name: 'manage-id',
         component: () => import('../views/ManageIdView.vue')
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: () => import('../views/LoginView.vue')
     }
   ]
 })
