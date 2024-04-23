@@ -3,6 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import Button from 'primevue/button';
 import ScrollTop from 'primevue/scrolltop';
 import Toast from 'primevue/toast';
+import ConfirmDialog from 'primevue/confirmdialog';
 </script>
 
 <template>
@@ -30,6 +31,7 @@ import Toast from 'primevue/toast';
     <RouterView />
     <ScrollTop />
     <Toast position="top-right" />
+    <ConfirmDialog />
 </template>
 
 <style scoped>

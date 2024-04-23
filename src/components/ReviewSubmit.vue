@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue';
-import router from '@/router';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -30,7 +29,6 @@ const handleSubmit = () => {
         selectedOtherOrganizations: props.selectedOtherOrganizations,
         selectedPolicyAgreement: props.selectedPolicyAgreement
     });
-    router.push('/success');
 };
 
 const eventData = computed(() => [
