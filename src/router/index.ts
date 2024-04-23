@@ -28,6 +28,11 @@ const router = createRouter({
         path: '/manage',
         name: 'manage',
         component: () => import('../views/ManageView.vue')
+    },
+    {
+        path: '/manage/:id',
+        name: 'manage-id',
+        component: () => import('../views/ManageIdView.vue')
     }
   ]
 })

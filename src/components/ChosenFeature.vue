@@ -48,25 +48,33 @@ const featureOptions = [
     { name: 'Private/Residential' }
 ];
 
-const updateSelectedFeatureType = (event: Event) => {
-    // selectedFeatureType.value = selectedFeatureType.value.name;
-    // console.log(selectedFeatureType.value);
-};
-
-const updateSelectedFeatureStaff = (event: Event) => {
-    // selectedFeatureStaff.value = selectedFeatureStaff.value.map((staff) => staff.name);
-    // console.log(selectedFeatureStaff.value);
-};
-
-const updateSelectedFeatureDescription = (event: Event) => {
-    // selectedFeatureDescription.value = selectedFeatureDescription.value;
-    // console.log(selectedFeatureDescription.value);
+const checkAndEmits = () => {
     if (selectedFeatureType.value && selectedFeatureStaff.value.length > 0 && selectedFeatureDescription.value) {
         emits('next-step-enabled');
         emits('update-feature-type', selectedFeatureType.value);
         emits('update-feature-staff', selectedFeatureStaff.value);
         emits('update-feature-description', selectedFeatureDescription.value);
+    } else {
+        emits('next-step-disabled');
     }
+};
+
+const updateSelectedFeatureType = (event: Event) => {
+    // selectedFeatureType.value = selectedFeatureType.value.name;
+    // console.log(selectedFeatureType.value);
+    checkAndEmits();
+};
+
+const updateSelectedFeatureStaff = (event: Event) => {
+    // selectedFeatureStaff.value = selectedFeatureStaff.value.map((staff) => staff.name);
+    // console.log(selectedFeatureStaff.value);
+    checkAndEmits();
+};
+
+const updateSelectedFeatureDescription = (event: Event) => {
+    // selectedFeatureDescription.value = selectedFeatureDescription.value;
+    // console.log(selectedFeatureDescription.value);
+    checkAndEmits();
 };
 
 </script>

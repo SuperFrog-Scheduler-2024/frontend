@@ -9,7 +9,10 @@ emits('next-step-disabled');
 const selectedPolicyAgreement = ref<boolean>(false);
 
 const updateSelectedPolicyAgreement = (value: boolean) => {
-    if (!value) return
+    if (!value) {
+        emits('next-step-disabled');
+        return;
+    }
     emits('next-step-enabled');
     emits('update-policy-agreement', value);
 };
