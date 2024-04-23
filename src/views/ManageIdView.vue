@@ -19,33 +19,33 @@
         </div>
         <div class="group">
             <FloatLabel>
-                <Calendar id="starttime" v-model="selectedStartTime" @update:model-value="updateSelectedStartTime" />
+                <Calendar id="starttime" v-model="selectedStartTime" :disabled="isCancelled" @update:model-value="updateSelectedStartTime" />
                 <label for="starttime">Start Time</label>
             </FloatLabel>
             <FloatLabel>
-                <InputNumber v-model="selectedDuration" inputId="minmax-buttons" mode="decimal" showButtons :step="30"
+                <InputNumber v-model="selectedDuration" :disabled="isCancelled" inputId="minmax-buttons" mode="decimal" showButtons :step="30"
                     :min="0" :max="180" @update:model-value="updateSelectedDuration" />
                 <label for="duration">Duration</label>
             </FloatLabel>
         </div>
         <div class="group">
             <FloatLabel>
-                <InputText id="firstname" v-model="selectedFirstName" @update:model-value="updateSelectedFirstName" />
+                <InputText id="firstname" v-model="selectedFirstName" :disabled="isCancelled" @update:model-value="updateSelectedFirstName" />
                 <label for="firstname">First Name</label>
             </FloatLabel>
             <FloatLabel>
-                <InputText id="lastname" v-model="selectedLastName" @update:model-value="updateSelectedLastName" />
+                <InputText id="lastname" v-model="selectedLastName" :disabled="isCancelled" @update:model-value="updateSelectedLastName" />
                 <label for="lastname">Last Name</label>
             </FloatLabel>
         </div>
         <div class="group">
             <FloatLabel>
-                <InputMask id="phonenumber" mask="(999) 999-9999" v-model="selectedPhoneNumber"
+                <InputMask id="phonenumber" mask="(999) 999-9999" v-model="selectedPhoneNumber" :disabled="isCancelled"
                     @update:model-value="updateSelectedPhoneNumber" />
                 <label for="phonenumber">Phone Number</label>
             </FloatLabel>
             <FloatLabel>
-                <InputText id="email" v-model="selectedEmail" @update:model-value="updateSelectedEmail"
+                <InputText id="email" v-model="selectedEmail" :disabled="isCancelled" @update:model-value="updateSelectedEmail"
                     @focusout="checkErrors" />
                 <label for="email">Email</label>
             </FloatLabel>
@@ -53,62 +53,62 @@
         <h2>Event Information</h2>
         <div class="group">
             <FloatLabel>
-                <InputText id="eventtitle" v-model="selectedEventTitle"
+                <InputText id="eventtitle" v-model="selectedEventTitle" :disabled="isCancelled"
                     @update:model-value="updateSelectedEventTitle" />
                 <label for="eventtitle">Event Title</label>
             </FloatLabel>
             <FloatLabel>
-                <InputText id="organization" v-model="selectedOrganization"
+                <InputText id="organization" v-model="selectedOrganization" :disabled="isCancelled"
                     @update:model-value="updateSelectedOrganization" />
                 <label for="organization">Organization</label>
             </FloatLabel>
         </div>
         <div class="group">
             <FloatLabel>
-                <Textarea id="eventdescription" v-model="selectedEventDescription"
+                <Textarea id="eventdescription" v-model="selectedEventDescription" :disabled="isCancelled"
                     @update:model-value="updateSelectedEventDescription" />
                 <label for="eventdescription">Event Description</label>
             </FloatLabel>
         </div>
         <div class="group">
             <FloatLabel>
-                <Dropdown v-model="selectedEventType" :options="eventOptions" optionLabel="name"
+                <Dropdown v-model="selectedEventType" :disabled="isCancelled" :options="eventOptions" optionLabel="name"
                     @update:model-value="updateSelectedEventType" placeholder="Select Feature Type" class="" />
                 <label for="eventtype">Event Type</label>
             </FloatLabel>
         </div>
         <div class="group">
-            <ToggleButton v-model="selectedOnCampus" onLabel="On Campus" offLabel="Off Campus"
+            <ToggleButton v-model="selectedOnCampus" :disabled="isCancelled" onLabel="On Campus" offLabel="Off Campus"
                 @update:model-value="updateSelectedOnCampus" />
         </div>
         <div class="group">
             <FloatLabel>
-                <InputText id="address" v-model="selectedAddress" @update:model-value="updateSelectedAddress" />
+                <InputText id="address" v-model="selectedAddress" :disabled="isCancelled" @update:model-value="updateSelectedAddress" />
                 <label for="address">Address</label>
             </FloatLabel>
         </div>
         <div class="group">
             <FloatLabel>
-                <Textarea id="specialinstructions" v-model="selectedSpecialInstructions"
+                <Textarea id="specialinstructions" v-model="selectedSpecialInstructions" :disabled="isCancelled"
                     @update:model-value="updateSelectedSpecialInstructions" />
                 <label for="specialinstructions">Special Instructions</label>
             </FloatLabel>
             <FloatLabel>
-                <Textarea id="expensesbenefits" v-model="selectedExpensesBenefits"
+                <Textarea id="expensesbenefits" v-model="selectedExpensesBenefits" :disabled="isCancelled"
                     @update:model-value="updateSelectedExpensesBenefits" />
                 <label for="expensesbenefits">Expenses/Benefits</label>
             </FloatLabel>
         </div>
         <div class="group">
             <FloatLabel>
-                <Textarea id="otherorganizations" v-model="selectedOtherOrganizations"
+                <Textarea id="otherorganizations" v-model="selectedOtherOrganizations" :disabled="isCancelled"
                     @update:model-value="updateSelectedOtherOrganizations" />
                 <label for="otherorganizations">Other Organizations</label>
             </FloatLabel>
         </div>
         <div class="group">
-            <Button label="Update" @click="handleUpdate" />
-            <Button label="Cancel" @click="handleCancel" />
+            <Button label="Update" :disabled="isCancelled" @click="handleUpdate" />
+            <Button label="Cancel" :disabled="isCancelled" @click="handleCancel" />
         </div>
     </div>
 </template>
@@ -127,8 +127,11 @@ import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import { useToast } from 'primevue/usetoast';
+import { useConfirm } from "primevue/useconfirm";
+import router from '@/router';
 
 const toast = useToast();
+const confirm = useConfirm();
 
 const route = useRoute();
 
@@ -161,6 +164,8 @@ const selectedSpecialInstructions = ref('');
 const selectedExpensesBenefits = ref('');
 const selectedOtherOrganizations = ref('');
 
+const isCancelled = ref(false);
+
 watch(() => route.params.id, fetchData, { immediate: true })
 
 async function fetchData(id: any) {
@@ -180,7 +185,7 @@ async function fetchData(id: any) {
         selectedPhoneNumber.value = request.value.phoneNumber;
         selectedEmail.value = request.value.email;
         selectedEventTitle.value = request.value.eventTitle;
-        selectedEventType.value = request.value.eventType;
+        selectedEventType.value.name = request.value.eventType;
         selectedEventDescription.value = request.value.eventDescription;
         selectedOrganization.value = request.value.organizationName;
         selectedOnCampus.value = request.value.onCampus;
@@ -188,8 +193,10 @@ async function fetchData(id: any) {
         selectedSpecialInstructions.value = request.value.specialInstructions;
         selectedExpensesBenefits.value = request.value.expensesAndBenefitsToSpiritTeam;
         selectedOtherOrganizations.value = request.value.otherOutsideOrganizations;
-    }).catch((error) => {
-        toast.add({ severity: 'error', summary: 'Error', detail: error.message });
+        isCancelled.value = request.value.status === 'cancelled';
+    }).catch((error: Error) => {
+        toast.add({ severity: 'error', summary: error.name, detail: error.message, life: 3000 });
+        router.push({ name: 'manage' });
     }).finally(() => {
         loading.value = false;
     });
@@ -292,22 +299,60 @@ const handleUpdate = () => {
         expensesAndBenefitsToSpiritTeam: selectedExpensesBenefits.value,
         otherOutsideOrganizations: selectedOtherOrganizations.value,
         status: selectedStatus.value,
-        approved: request.value.approved, // Assuming you want this to be true by default
+        approved: request.value.approved,
         paid: selectedPaid.value,
-        amount: request.value.amount // Assuming you want to keep the same amount for all updates
+        amount: request.value.amount
     };
 
     axios.put(`${import.meta.env.VITE_API_URL}/requests/${selectedId.value}`, requestData)
         .then((response) => {
-            console.log(response);
+            toast.add({ severity: 'success', summary: response.data.message, detail: 'Request updated', life: 3000 });
         })
-        .catch((error) => {
-            console.error(error);
+        .catch((error: Error) => {
+            toast.add({ severity: 'error', summary: error.name, detail: error.message, life: 3000 });
         });
 };
 
 const handleCancel = () => {
-    console.log('Cancel');
+    if (!['Pending', 'Approved', 'Assigned'].includes(selectedStatus.value)) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'A request with this status cannot be cancelled', life: 3000 });
+        return;
+    }
+    const requestData = {
+        customerFirstName: selectedFirstName.value,
+        customerLastName: selectedLastName.value,
+        phoneNumber: selectedPhoneNumber.value,
+        email: selectedEmail.value,
+        startTime: selectedStartTime.value.toISOString(),
+        duration: selectedDuration.value,
+        eventTitle: selectedEventTitle.value,
+        organizationName: selectedOrganization.value,
+        eventDescription: selectedEventDescription.value,
+        eventType: selectedEventType.value.name,
+        eventAddress: selectedAddress.value,
+        onCampus: selectedOnCampus.value,
+        specialInstructions: selectedSpecialInstructions.value,
+        expensesAndBenefitsToSpiritTeam: selectedExpensesBenefits.value,
+        otherOutsideOrganizations: selectedOtherOrganizations.value,
+        status: 'Cancelled by the customer',
+        approved: request.value.approved,
+        paid: selectedPaid.value,
+        amount: request.value.amount
+    };
+    confirm.require({
+        message: 'Are you sure you want to cancel this request?',
+        accept: () => {
+            axios.put(`${import.meta.env.VITE_API_URL}/requests/${selectedId.value}`, requestData)
+                .then((response) => {
+                    toast.add({ severity: 'success', summary: response.data.message, detail: 'Request cancelled', life: 3000 });
+                })
+                .catch((error: Error) => {
+                    toast.add({ severity: 'error', summary: error.name, detail: error.message, life: 3000 });
+                }).finally(() => {
+                    router.push({ name: 'home' });
+                });
+        }
+    });
 };
 
 </script>

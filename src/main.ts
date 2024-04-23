@@ -16,6 +16,7 @@ import router from './router'
 
 import AnimateOnScroll from 'primevue/animateonscroll';
 import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
 
 const app = createApp(App)
 
@@ -24,6 +25,7 @@ app.use(router)
 app.use(PrimeVue);
 // app.use(OpenLayersMap);
 app.use(ToastService);
+app.use(ConfirmationService);
 
 app.directive('animateonscroll', AnimateOnScroll);
 

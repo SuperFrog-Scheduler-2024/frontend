@@ -3,6 +3,8 @@ import Stepper from 'primevue/stepper';
 import StepperPanel from 'primevue/stepperpanel';
 import Button from 'primevue/button';
 import { ref, reactive, onMounted } from 'vue';
+// import router from '@/router';
+import { useRouter } from 'vue-router';
 import DateTime from '@/components/DateTime.vue';
 import ChosenFeature from '@/components/ChosenFeature.vue';
 import CompleteForm from '@/components/CompleteForm.vue';
@@ -12,6 +14,8 @@ import ReviewSubmit from '@/components/ReviewSubmit.vue';
 import axios from 'axios';
 
 const backendApiUrl = import.meta.env.VITE_API_URL;
+
+const router = useRouter();
 
 // Define a ref for "nextButtonStatus"
 const nextButtonStatus1 = ref(true);
@@ -86,14 +90,14 @@ const handleSubmit = (submittedData: any) => {
         "expensesAndBenefitsToSpiritTeam": submittedData.selectedExpensesBenefits,
         "otherOutsideOrganizations": submittedData.selectedOtherOrganizations,
         "eventDescription": submittedData.selectedFeatureDescription,
-        "status": "pending",
+        "status": "Pending",
         "approved": false,
         "paid": false,
         "amount": amount
     }
 
     axios.post(`${backendApiUrl}/requests`, toCreate)
-        .then(response => console.log(response.data))
+        .then(response => router.push(`/manage/${response.data.data.id}`))
         .catch(error => console.error(error));
 };
 
