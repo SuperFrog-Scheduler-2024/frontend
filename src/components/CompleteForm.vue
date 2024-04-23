@@ -4,7 +4,8 @@
             <h2>Personal Information</h2>
             <div class="group">
                 <FloatLabel>
-                    <InputText id="firstname" v-model="selectedFirstName" @update:model-value="updateSelectedFirstName" />
+                    <InputText id="firstname" v-model="selectedFirstName"
+                        @update:model-value="updateSelectedFirstName" />
                     <label for="firstname">First Name</label>
                 </FloatLabel>
                 <FloatLabel>
@@ -14,27 +15,31 @@
             </div>
             <div class="group">
                 <FloatLabel>
-                    <InputMask id="phonenumber" mask="(999) 999-9999" v-model="selectedPhoneNumber" @update:model-value="updateSelectedPhoneNumber" />
+                    <InputMask id="phonenumber" mask="(999) 999-9999" v-model="selectedPhoneNumber"
+                        @update:model-value="updateSelectedPhoneNumber" />
                     <label for="phonenumber">Phone Number</label>
                 </FloatLabel>
                 <FloatLabel>
-                    <InputText id="email" v-model="selectedEmail" @update:model-value="updateSelectedEmail" />
+                    <InputText id="email" v-model="selectedEmail" @update:model-value="updateSelectedEmail" @focusout="checkErrors" />
                     <label for="email">Email</label>
                 </FloatLabel>
             </div>
             <h2>Event Information</h2>
             <div class="group">
                 <FloatLabel>
-                    <InputText id="eventtitle" v-model="selectedEventTitle" @update:model-value="updateSelectedEventTitle" />
+                    <InputText id="eventtitle" v-model="selectedEventTitle"
+                        @update:model-value="updateSelectedEventTitle" />
                     <label for="eventtitle">Event Title</label>
                 </FloatLabel>
                 <FloatLabel>
-                    <InputText id="organization" v-model="selectedOrganization" @update:model-value="updateSelectedOrganization" />
+                    <InputText id="organization" v-model="selectedOrganization"
+                        @update:model-value="updateSelectedOrganization" />
                     <label for="organization">Organization</label>
                 </FloatLabel>
             </div>
             <div class="group">
-                <ToggleButton v-model="selectedOnCampus" onLabel="On Campus" offLabel="Off Campus" @update:model-value="updateSelectedOnCampus" />
+                <ToggleButton v-model="selectedOnCampus" onLabel="On Campus" offLabel="Off Campus"
+                    @update:model-value="updateSelectedOnCampus" />
             </div>
             <div class="group">
                 <FloatLabel>
@@ -44,17 +49,20 @@
             </div>
             <div class="group">
                 <FloatLabel>
-                    <Textarea id="specialinstructions" v-model="selectedSpecialInstructions" @update:model-value="updateSelectedSpecialInstructions" />
+                    <Textarea id="specialinstructions" v-model="selectedSpecialInstructions"
+                        @update:model-value="updateSelectedSpecialInstructions" />
                     <label for="specialinstructions">Special Instructions</label>
                 </FloatLabel>
                 <FloatLabel>
-                    <Textarea id="expensesbenefits" v-model="selectedExpensesBenefits" @update:model-value="updateSelectedExpensesBenefits" />
+                    <Textarea id="expensesbenefits" v-model="selectedExpensesBenefits"
+                        @update:model-value="updateSelectedExpensesBenefits" />
                     <label for="expensesbenefits">Expenses/Benefits</label>
                 </FloatLabel>
             </div>
             <div class="group">
                 <FloatLabel>
-                    <InputText id="otherorganizations" v-model="selectedOtherOrganizations" @update:model-value="updateSelectedOtherOrganizations" />
+                    <InputText id="otherorganizations" v-model="selectedOtherOrganizations"
+                        @update:model-value="updateSelectedOtherOrganizations" />
                     <label for="otherorganizations">Other Organizations</label>
                 </FloatLabel>
             </div>
@@ -69,6 +77,9 @@ import InputText from 'primevue/inputtext';
 import InputMask from 'primevue/inputmask';
 import ToggleButton from 'primevue/togglebutton';
 import Textarea from 'primevue/textarea';
+import { useToast } from 'primevue/usetoast';
+
+const toast = useToast();
 
 const emits = defineEmits(['next-step-disabled', 'next-step-enabled', 'update-first-name', 'update-last-name', 'update-phone-number', 'update-email', 'update-event-title', 'update-organization', 'update-on-campus', 'update-address', 'update-special-instructions', 'update-expenses-benefits', 'update-other-organizations']);
 
@@ -86,48 +97,7 @@ const selectedSpecialInstructions = ref<string>('');
 const selectedExpensesBenefits = ref<string>('');
 const selectedOtherOrganizations = ref<string>('');
 
-const updateSelectedFirstName = (value: string) => {
-    // selectedFirstName.value = value;
-};
-
-const updateSelectedLastName = (value: string) => {
-    // selectedLastName.value = value;
-};
-
-const updateSelectedPhoneNumber = (value: string) => {
-    // selectedPhoneNumber.value = value;
-};
-
-const updateSelectedEmail = (value: string) => {
-    // selectedEmail.value = value;
-};
-
-const updateSelectedEventTitle = (value: string) => {
-    // selectedEventTitle.value = value;
-};
-
-const updateSelectedOrganization = (value: string) => {
-    // selectedOrganization.value = value;
-};
-
-const updateSelectedOnCampus = (value: boolean) => {
-    // selectedOnCampus.value = value;
-};
-
-const updateSelectedAddress = (value: string) => {
-    // selectedAddress.value = value;
-};
-
-const updateSelectedSpecialInstructions = (value: string) => {
-    // selectedSpecialInstructions.value = value;
-};
-
-const updateSelectedExpensesBenefits = (value: string) => {
-    // selectedExpensesBenefits.value = value;
-};
-
-const updateSelectedOtherOrganizations = (value: string) => {
-    // selectedOtherOrganizations.value = value;
+const checkAndEmits = () => {
     if (selectedFirstName.value && selectedLastName.value && selectedPhoneNumber.value && selectedEmail.value && selectedEventTitle.value && selectedOrganization.value && selectedAddress.value && selectedSpecialInstructions.value && selectedExpensesBenefits.value && selectedOtherOrganizations.value) {
         emits('next-step-enabled');
         emits('update-first-name', selectedFirstName.value);
@@ -141,7 +111,72 @@ const updateSelectedOtherOrganizations = (value: string) => {
         emits('update-special-instructions', selectedSpecialInstructions.value);
         emits('update-expenses-benefits', selectedExpensesBenefits.value);
         emits('update-other-organizations', selectedOtherOrganizations.value);
+    } else {
+        emits('next-step-disabled');
     }
+};
+
+const checkErrors = () => {
+    if (!selectedEmail.value.includes('@')) {
+        toast.add({ severity: 'error', summary: 'Invalid Email', detail: 'Please enter a valid email address', life: 3000 });
+        emits('next-step-disabled');
+    }
+};
+
+const updateSelectedFirstName = (value: string) => {
+    // selectedFirstName.value = value;
+    checkAndEmits();
+};
+
+const updateSelectedLastName = (value: string) => {
+    // selectedLastName.value = value;
+    checkAndEmits();
+};
+
+const updateSelectedPhoneNumber = (value: string) => {
+    // selectedPhoneNumber.value = value;
+    checkAndEmits();
+};
+
+const updateSelectedEmail = (value: string) => {
+    // if there is no @ symbol in the email, it is invalid
+    // selectedEmail.value = value;
+    checkAndEmits();
+};
+
+const updateSelectedEventTitle = (value: string) => {
+    // selectedEventTitle.value = value;
+    checkAndEmits();
+};
+
+const updateSelectedOrganization = (value: string) => {
+    // selectedOrganization.value = value;
+    checkAndEmits();
+};
+
+const updateSelectedOnCampus = (value: boolean) => {
+    // selectedOnCampus.value = value;
+    checkAndEmits();
+};
+
+const updateSelectedAddress = (value: string) => {
+    // selectedAddress.value = value;
+    checkAndEmits();
+};
+
+const updateSelectedSpecialInstructions = (value: string) => {
+    // selectedSpecialInstructions.value = value;
+    checkAndEmits();
+};
+
+const updateSelectedExpensesBenefits = (value: string) => {
+    // selectedExpensesBenefits.value = value;
+    checkAndEmits();
+};
+
+const updateSelectedOtherOrganizations = (value: string) => {
+    // selectedOtherOrganizations.value = value;
+    checkAndEmits();
 };
 </script>
 

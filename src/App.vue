@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import Button from 'primevue/button';
 import ScrollTop from 'primevue/scrolltop';
+import Toast from 'primevue/toast';
 </script>
 
 <template>
@@ -28,6 +29,7 @@ import ScrollTop from 'primevue/scrolltop';
     </header>
     <RouterView />
     <ScrollTop />
+    <Toast position="top-right" />
 </template>
 
 <style scoped>

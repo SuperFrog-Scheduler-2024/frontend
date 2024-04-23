@@ -42,27 +42,37 @@ const selectedEndTime = ref<Date | null>(null);
 // Function to set the time of a date to match another date
 const setTimeToDate = (dateToMatch: Date, timeToSet: Date) => {
     const newDate = new Date(dateToMatch);
-    newDate.setHours(timeToSet.getHours());
-    newDate.setMinutes(timeToSet.getMinutes());
+    newDate.setUTCHours(timeToSet.getUTCHours());
+    newDate.setUTCMinutes(timeToSet.getUTCMinutes());
     return newDate;
 };
 
 // Update selectedDate value
 const updateSelectedDate = (value: Date | Date[] | (Date | null)[] | null | undefined) => {
     if (selectedDate) selectedDate.value = value as Date;
+    checkAndEmits();
 };
 
 // Update selectedStartTime value
 const updateSelectedStartTime = (value: Date | Date[] | (Date | null)[] | null | undefined) => {
-    if (selectedDate.value) selectedStartTime.value = setTimeToDate(selectedDate.value, value as Date);
+    checkAndEmits();
 };
 
 // Update selectedEndTime value
 const updateSelectedEndTime = (value: Date | Date[] | (Date | null)[] | null | undefined) => {
-    if (selectedDate.value) selectedEndTime.value = setTimeToDate(selectedDate.value, value as Date);
+    checkAndEmits();
+};
+
+const checkAndEmits = () => {
     if (selectedDate.value && selectedStartTime.value && selectedEndTime.value) {
+        setTimeToDate(selectedDate.value, selectedStartTime.value);
+        setTimeToDate(selectedDate.value, selectedEndTime.value);
+        selectedStartTime.value.setMinutes(Math.round(selectedStartTime.value.getMinutes() / 30) * 30);
+        selectedEndTime.value.setMinutes(Math.round(selectedEndTime.value.getMinutes() / 30) * 30);
+        selectedStartTime.value.setSeconds(0);
+        selectedEndTime.value.setSeconds(0);
         emits('next-step-enabled');
-        let timeLength = (selectedEndTime.value.getTime() - selectedStartTime.value.getTime()) / 60000;
+        let timeLength = Math.round((selectedEndTime.value.getTime() - selectedStartTime.value.getTime()) / 60000 * 100) / 100;
         emits('update-start-time', selectedStartTime.value);
         emits('update-time-length', timeLength);
     }
