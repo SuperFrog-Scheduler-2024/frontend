@@ -38,6 +38,16 @@ const router = createRouter({
         path: '/login',
         name: 'login',
         component: () => import('../views/LoginView.vue')
+    },
+    {
+        path: '/superfrog',
+        name: 'superfrog',
+        component: () => import('../views/SuperFrogView.vue')
+    },
+    {
+        path: '/spiritdirector',
+        name: 'spiritdirector',
+        component: () => import('../views/SpiritDirectorView.vue')
     }
   ]
 })

@@ -1,16 +1,20 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
 import Button from 'primevue/button';
 import ScrollTop from 'primevue/scrolltop';
 import Toast from 'primevue/toast';
 import ConfirmDialog from 'primevue/confirmdialog';
+import Sidebar from 'primevue/sidebar';
+
+const sideBarOpen = ref(false);
 </script>
 
 <template>
     <header>
         <div id="app-name">
             <a href="https://www.tcu.edu">
-                <img alt="Vue logo" class="logo" src="@/assets/logo.svg"/>
+                <img alt="Vue logo" class="logo" src="@/assets/logo.svg" />
             </a>
             <RouterLink to="/" class="app-title">
                 SuperFrog Scheduler
@@ -24,7 +28,11 @@ import ConfirmDialog from 'primevue/confirmdialog';
                 <RouterLink to="/range" activeClass="active">Range</RouterLink>
                 <RouterLink to="/request" activeClass="active">Request</RouterLink>
                 <RouterLink to="/manage" activeClass="active">Manage</RouterLink>
-                <Button icon="pi pi-user" text raised rounded aria-label="User" />
+                <Button icon="pi pi-user" text raised rounded aria-label="User" @click="sideBarOpen=true" />
+                <Sidebar v-model:visible="sideBarOpen" header="Account" position="right">
+                    <RouterLink to="/spiritdirector" activeClass="active">SpiritDirector</RouterLink>
+                    <RouterLink to="/superfrog" activeClass="active">SuperFrog</RouterLink>
+                </Sidebar>
             </nav>
         </div>
     </header>
@@ -56,7 +64,8 @@ header {
 .wrapper {
     display: flex;
     align-items: center;
-    margin-left: auto; /* Align the wrapper to the right */
+    margin-left: auto;
+    /* Align the wrapper to the right */
 }
 
 nav {

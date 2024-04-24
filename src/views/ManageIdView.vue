@@ -4,17 +4,17 @@
         <h1>Manage Request</h1>
         <div class="group">
             <FloatLabel>
-                <InputText id="id" v-model="selectedId" disabled @update:model-value="updateSelectedId"
+                <InputText id="id" v-model="selectedId" :disabled="!isLoggedIn" @update:model-value="updateSelectedId"
                     style="width: 24rem;" />
                 <label for="id">ID</label>
             </FloatLabel>
         </div>
         <div class="group">
             <FloatLabel>
-                <InputText id="status" v-model="selectedStatus" disabled @update:model-value="updateSelectedStatus" />
+                <InputText id="status" v-model="selectedStatus" :disabled="!isLoggedIn" @update:model-value="updateSelectedStatus" />
                 <label for="status">Status</label>
             </FloatLabel>
-            <ToggleButton v-model="selectedPaid" disabled onLabel="Paid" offLabel="Not Paid"
+            <ToggleButton v-model="selectedPaid" :disabled="!isLoggedIn" onLabel="Paid" offLabel="Not Paid"
                 @update:model-value="updateSelectedPaid" />
         </div>
         <div class="group">
@@ -114,7 +114,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import FloatLabel from 'primevue/floatlabel';
@@ -129,11 +129,36 @@ import Dropdown from 'primevue/dropdown';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from "primevue/useconfirm";
 import router from '@/router';
+import { useAuthStore } from '../stores/auth';
 
 const toast = useToast();
 const confirm = useConfirm();
 
 const route = useRoute();
+
+const authStore = useAuthStore();
+
+const requests = ref<any[]>([]);
+const isLoggedIn = ref(authStore.isLoggedIn);
+const userName = ref(authStore.userName);
+const userEmail = ref(authStore.userEmail);
+const isLoading = ref(true);
+
+onMounted(async () => {
+    await authStore.getUser();
+    isLoggedIn.value = authStore.isLoggedIn;
+    userName.value = authStore.userName;
+    userEmail.value = authStore.userEmail;
+    isLoading.value = false;
+});
+
+watch(() => {
+    return authStore.isLoggedIn;
+}, () => {
+    isLoggedIn.value = authStore.isLoggedIn;
+    userName.value = authStore.userName;
+    userEmail.value = authStore.userEmail;
+});
 
 const eventOptions = [
     { name: 'TCU' },
@@ -277,7 +302,7 @@ const updateSelectedOtherOrganizations = (value: string) => {
 
 const checkErrors = () => {
     if (!selectedEmail.value.includes('@')) {
-        console.log('Invalid email');
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Invalid email address', life: 3000 });
     }
 };
 
