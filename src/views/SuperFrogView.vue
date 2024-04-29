@@ -96,6 +96,7 @@ const fetchRequests = async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/requests`);
         requests.value = response.data.data;
+        requests.value.filter((request: any) => request.status === 'Approved');
         toast.add({ severity: 'success', summary: 'Success', detail: 'Requests fetched successfully', life: 3000 });
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error fetching requests', life: 3000 });
