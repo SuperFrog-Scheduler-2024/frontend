@@ -5,8 +5,21 @@
         <div id="spiritdirector-view" v-else-if="isLoggedIn">
             <TabView v-model:activeIndex="activeTab">
                 <TabPanel header="View Students">
-                    <p>Content for View Students tab goes here</p>
+                    <div id="student-tab">
+                        <h3>SuperFrog Students</h3>
+                        <div class="group">
+                            <Button label="Fetch Students" @click="fetchStudents" />
+                        </div>
+                        <DataTable scrollable :value="students" tableStyle="min-width: 50rem">
+                            <Column field="id" header="ID" style="min-width: 24rem"></Column>
+                            <Column field="name" header="Name" style="min-width: 24rem"></Column>
+                            <Column field="email" header="Email" style="min-width: 24rem"></Column>
+                            <Column field="phoneNumber" header="Phone Number" style="min-width: 12rem"></Column>
+                            <Column field="availability" header="Availability" style="min-width: 24rem"></Column>
+                        </DataTable>
+                    </div>
                 </TabPanel>
+                
                 <TabPanel header="View Requests">
                     <div id="request-tab">
                         <h3>Requests</h3>
@@ -85,6 +98,8 @@ const authStore = useAuthStore();
 const toast = useToast();
 
 const requests = ref<any[]>([]);
+const students = ref<any[]>([]);
+
 const isLoggedIn = ref(authStore.isLoggedIn);
 const userName = ref(authStore.userName);
 const userEmail = ref(authStore.userEmail);
@@ -123,6 +138,18 @@ const fetchRequests = async () => {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error fetching requests', life: 3000 });
     }
 };
+
+const fetchStudents = async () => {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/students`);
+        students.value = response.data.data;
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Students fetched successfully', life: 3000 });
+    } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: "Error fetching students", life: 3000 });
+    }
+};
+
+
 
 watch(fetchRequests, () => {})
 
