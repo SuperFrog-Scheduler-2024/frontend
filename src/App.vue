@@ -7,6 +7,7 @@ import Toast from 'primevue/toast';
 import ConfirmDialog from 'primevue/confirmdialog';
 import Sidebar from 'primevue/sidebar';
 
+
 const sideBarOpen = ref(false);
 </script>
 
@@ -28,6 +29,7 @@ const sideBarOpen = ref(false);
                 <RouterLink to="/range" activeClass="active">Range</RouterLink>
                 <RouterLink to="/request" activeClass="active">Request</RouterLink>
                 <RouterLink to="/manage" activeClass="active">Manage</RouterLink>
+                <RouterLink to="/login" activeClass="active">Login</RouterLink>
                 <Button icon="pi pi-user" text raised rounded aria-label="User" @click="sideBarOpen=true" />
                 <Sidebar v-model:visible="sideBarOpen" header="Account" position="right">
                     <RouterLink to="/spiritdirector" activeClass="active">SpiritDirector</RouterLink>
