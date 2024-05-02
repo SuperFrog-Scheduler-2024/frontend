@@ -4,9 +4,6 @@
         <div v-if="isLoading">Loading...</div>
         <div id="spiritdirector-view" v-else-if="isLoggedIn">
             <TabView v-model:activeIndex="activeTab">
-                <TabPanel header="View Students">
-                    <p>Content for View Students tab goes here</p>
-                </TabPanel>
                 <TabPanel header="View Requests">
                     <div id="request-tab">
                         <h3>Requests</h3>
@@ -42,8 +39,8 @@
                         </div>
                     </div>
                 </TabPanel>
-                <TabPanel header="Calendar">
-                    <p>Content for Calendar tab goes here</p>
+                    <TabPanel header="Calendar">
+                        <FullCalendar :options="calendarOptions" />
                 </TabPanel>
                 <TabPanel header="Reports">
                     <p>Content for Reports tab goes here</p>
@@ -57,6 +54,12 @@
 </template>
 
 <script setup lang="ts">
+
+import FullCalendar from '@fullcalendar/vue3'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import timeGridPlugin from '@fullcalendar/timegrid'
+
 import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import { useAuthStore } from '../stores/auth';
@@ -83,6 +86,21 @@ const isLoading = ref(true);
 
 const activeTab = ref(0);
 const cancelDialogOpen = ref(false);
+const calendarOptions = ref({
+  plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
+  initialView: 'dayGridMonth',
+  headerToolbar: {
+    left: 'prev,next today',
+    center: 'title',
+    right: 'dayGridMonth,dayGridWeek,dayGridDay'
+  },
+  events: [
+    { title: 'Event 1', date: '2024-05-10' },
+    { title: 'Event 2', date: '2024-05-15' }
+  ],
+  editable: true,
+  selectable: true
+});
 
 onMounted(async () => {
     await authStore.getUser();
@@ -135,4 +153,6 @@ watch(fetchRequests, () => { })
     display: flex;
     gap: 1rem;
 }
+
+
 </style>
