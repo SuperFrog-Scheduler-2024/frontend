@@ -192,6 +192,7 @@ const cancelRequest = async (request: any, message: string) => {
         closeCancelDialog(request);
     }
 }
+
 </script>
 <style scoped>
 .p-tabview {
