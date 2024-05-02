@@ -1,14 +1,14 @@
 <template>
   <div class="login-container">
     <div class="login-form">
-      <h1>Login</h1>  
+      <h1 class="title">Login</h1>  
         <div class="p-field">
           <label for="username">Username</label>
           <InputText id="username" v-model="username" />
         </div>
         <div class="p-field">
           <label for="password">Password</label>
-          <Password id="password"  v-model="password" :feedback="false"" />
+          <Password id="password"  v-model="password" :feedback="false" />
         </div>
         <div class="login-button">
           <Button label="Submit" icon="pi pi-check" iconPos="right" />
@@ -33,12 +33,13 @@ const login = async () => {
 
 </script>
 
-<style scoped>
+<style>
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 30vh;
+  
 }
 
 .login {
@@ -48,11 +49,16 @@ const login = async () => {
   border-radius: 5px;
 }
 
+.title {
+  text-align: center;
+}
+
 .p-field {
   margin-bottom: 15px;
 }
 
 .login-button {
   margin-top: 15px;
+  justify-items: center;
 }
 </style>
