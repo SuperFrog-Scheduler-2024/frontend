@@ -12,7 +12,8 @@
                         </div>
                         <DataTable scrollable :value="students" tableStyle="min-width: 50rem">
                             <Column field="id" header="ID" style="min-width: 24rem"></Column>
-                            <Column field="name" header="Name" style="min-width: 24rem"></Column>
+                            <Column field="firstName" header="First Name" style="min-width: 24rem"></Column>
+                            <Column field="lastName" header="Last Name" style="min-width: 24rem"></Column>
                             <Column field="email" header="Email" style="min-width: 24rem"></Column>
                             <Column field="phoneNumber" header="Phone Number" style="min-width: 12rem"></Column>
                             <Column field="availability" header="Availability" style="min-width: 24rem"></Column>
@@ -141,8 +142,9 @@ const fetchRequests = async () => {
 
 const fetchStudents = async () => {
     try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/students`);
+        const response = await axios.get(`http://localhost:8080/api/v1/students`);
         students.value = response.data.data;
+        console.log()
         toast.add({ severity: 'success', summary: 'Success', detail: 'Students fetched successfully', life: 3000 });
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: "Error fetching students", life: 3000 });
