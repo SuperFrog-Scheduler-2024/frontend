@@ -1,62 +1,27 @@
 <template>
-        <form name="login-form" >
-          <div class="mb-3">
-            <label for="username">Username: </label>
-            <input type="text" id="username" v-model="input.username" />
-          </div>
-        <div class="mb-3">
-           <label for="password">Password: </label>
-           <input type="password" id="password" v-model="input.password" />
-        </div>
-          <button class="btn btn-outline-dark" type="submit" v-on:click.prevent = "login()">
-            Login
-          </button>
-        </form>
-  </template>
+  <div>
+      <h1>Login</h1>
+      <form @submit.prevent="login">
+      <input type="text" v-model="username" placeholder="Username" />
+      <input type="password" v-model="password" placeholder="Password" />
+      <button type="submit">Login</button>
+      </form>
+  </div>
+</template>
 
-<script>
-export default {
-  name: 'LoginView',
-  data(){
-    return{
-        input:{
-            username: "",
-            password: ""
-        }
-    }
-  },
-  methods:{
-    login(){
-      //make sure username OR password are not empty
-      if(this.input.username != "" || this.input.password != ""){
-        console.log("authenticated")
-      }else{
-        console.log("Username and Password can not be empty")
-      }
-    }
-  },
-}
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const username = ref('');
+
+const password = ref('');
+
+const router = useRouter();
+
+const login = async () => {
+  
+  router.push('/');
+};
+
 </script>
-
-
-export default {
-name: 'LoginView',
-data(){
-return{
-  input:{
-      username: "",
-      password: ""
-  }
-}
-},
-methods:{
-login(){
-//make sure username OR password are not empty
-if(this.input.username != "" || this.input.password != ""){
-  console.log("authenticated")
-}else{
-  console.log("Username and Password can not be empty")
-}
-}
-},
-}
