@@ -1,100 +1,75 @@
 <template>
     <div class='demo-app'>
-      <div class='demo-app-sidebar'>
-        <div class='demo-app-sidebar-section'>
-          <h2>Instructions</h2>
-          <ul>
-            <li>Select dates and you will be prompted to create a new event</li>
-            <li>Drag, drop, and resize events</li>
-            <li>Click an event to delete it</li>
-          </ul>
-        </div>
-        <div class='demo-app-sidebar-section'>
-          <h2>All Events ({{ currentEvents.length }})</h2>
-          <ul>
-            <li v-for='event in currentEvents' :key='event.id'>
-              <b>{{ event.startStr }}</b>
-              <i>{{ event.title }}</i>
-            </li>
-          </ul>
-        </div>
-      </div>
       <div class='demo-app-main'>
-        <FullCalendar
-          class='demo-app-calendar'
-          :options='calendarOptions'
-        />
+        <FullCalendar class='demo-app-calendar' :options='calendarOptions' />
       </div>
     </div>
-</template>
-
-<script setup lang="ts">
-import FullCalendar from '@fullcalendar/vue3';
-import { ref, onMounted, nextTick } from 'vue';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-
-let eventGuid = 0;
-
-const todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
-
-const calendarOptions = ref({
-  plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-  headerToolbar: {
-    left: 'prev,next today',
-    center: 'title',
-    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-  },
-  initialView: 'timeGridWeek',
-  slotMinTime: '06:00:00',
-  slotMaxTime: '22:00:00',
-  editable: true,
-  selectable: true,
-  selectMirror: true,
-  dayMaxEvents: true,
-  weekends: true,
-  events: [
+  </template>
   
-  ],
-  eventClick: function(clickInfo) {
-    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove();
+  <script setup lang="ts">
+  import FullCalendar from '@fullcalendar/vue3';
+  import axios from 'axios';
+  import { ref, onMounted } from 'vue';
+  import dayGridPlugin from '@fullcalendar/daygrid';
+  import timeGridPlugin from '@fullcalendar/timegrid';
+  import interactionPlugin from '@fullcalendar/interaction';
+  
+  const allowedTimes = ref({});
+  
+  const calendarOptions = ref({
+    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+    initialView: 'timeGridWeek',
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    slotMinTime: '06:00:00',
+    slotMaxTime: '22:00:00',
+    allDaySlot: false,
+    slotDuration: '01:00:00',
+    expandRows: true, // Make sure rows expand to fill height
+    height: 'auto',
+    eventDidMount: function(info) {
+      if (!isTimeAllowed(info.event.start)) {
+        info.el.style.backgroundColor = 'gray'; // Styling for events outside allowed times
+      }
+    },
+    eventContent: function(arg, createElement) {
+      // You can also apply custom content to indicate the slot is blocked
+      if (!isTimeAllowed(arg.date)) {
+        return { domNodes: [createElement('div', { style: 'color: red;' }, '<Blocked>')]}
+      }
     }
-  },
-  dateClick: function(info) {
-    let title = prompt('Please enter a new title for your event:');
-    if (title) {
-      info.calendar.addEvent({
-        id: createEventId(),
-        title,
-        start: info.date,
-        allDay: info.allDay
+  });
+  
+  function isTimeAllowed(date) {
+    const day = date.toLocaleString('en-us', { weekday: 'long' }).toUpperCase();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const timeString = `${hour}:${minute < 10 ? '0' : ''}${minute}`;
+    return allowedTimes.value[day]?.includes(timeString);
+  }
+  
+  onMounted(async () => {
+    await fetchStudentCalendar();
+  });
+  
+  async function fetchStudentCalendar() {
+    try {
+      const response = await axios.get('http://localhost:8080/api/v1/students/1');
+      const studentCalendar = response.data.data.calendar;
+      studentCalendar.forEach((entry) => {
+        const day = entry.day;
+        const time = entry.time;
+        if (!allowedTimes.value[day]) {
+          allowedTimes.value[day] = [];
+        }
+        allowedTimes.value[day].push(time);
       });
+    } catch (error) {
+      console.error('Failed to fetch calendar data:', error);
     }
   }
-});
-
-const currentEvents = ref([]);
-
-// Use onMounted to ensure FullCalendar is initialized after the component is fully mounted
-onMounted(() => {
-  nextTick(() => {
-    // Ensures that the DOM is fully updated before accessing or manipulating it
-    // Any further initialization that requires the updated DOM should go here
-  });
-});
-
-function handleEvents(events) {
-  currentEvents.value = events;
-}
-
-// Helper function to generate event IDs
-function createEventId() {
-  return String(eventGuid++);
-}
-</script>
-
-<style lang="css">
-/* Your CSS styles here */
-</style>
+  </script>
+  
