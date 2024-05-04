@@ -108,6 +108,8 @@ const isLoading = ref(true);
 
 const activeTab = ref(0);
 const cancelDialogOpen = ref<{ [key: string]: boolean }>({});
+const backendApiUrl = import.meta.env.VITE_API_URL;
+
 
 function openCancelDialog(rowData: any) {
         cancelDialogOpen.value[rowData.id] = true;
@@ -142,7 +144,7 @@ const fetchRequests = async () => {
 
 const fetchStudents = async () => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/v1/students`);
+        const response = await axios.get(`${backendApiUrl}/students`);
         students.value = response.data.data;
         console.log()
         toast.add({ severity: 'success', summary: 'Success', detail: 'Students fetched successfully', life: 3000 });

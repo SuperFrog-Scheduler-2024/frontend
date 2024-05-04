@@ -40,7 +40,7 @@
                     </div>
                 </TabPanel>
                     <TabPanel header="Calendar">
-                         <FullCalendar />
+                        <FullCalendar />
                 </TabPanel>
                 <TabPanel header="Reports">
                     <p>Content for Reports tab goes here</p>
@@ -55,10 +55,7 @@
 
 <script setup lang="ts">
 
-// import FullCalendar from '@fullcalendar/vue3'
-// import dayGridPlugin from '@fullcalendar/daygrid'
-// import interactionPlugin from '@fullcalendar/interaction'
-// import timeGridPlugin from '@fullcalendar/timegrid'
+
 
 
 import { ref, onMounted, watch } from 'vue';
@@ -73,7 +70,6 @@ import Tag from 'primevue/tag';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import FullCalendar from '@/components/FullCalendar.vue';
-
 const router = useRouter();
 
 const authStore = useAuthStore();
@@ -88,21 +84,8 @@ const isLoading = ref(true);
 
 const activeTab = ref(0);
 const cancelDialogOpen = ref(false);
-// const calendarOptions = ref({
-//   plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
-//   initialView: 'dayGridMonth',
-//   headerToolbar: {
-//     left: 'prev,next today',
-//     center: 'title',
-//     right: 'dayGridMonth,dayGridWeek,dayGridDay'
-//   },
-//   events: [
-//     { title: 'Event 1', date: '2024-05-10' },
-//     { title: 'Event 2', date: '2024-05-15' }
-//   ],
-//   editable: true,
-//   selectable: true
-// });
+const backendApiUrl = import.meta.env.VITE_API_URL;
+
 
 onMounted(async () => {
     await authStore.getUser();

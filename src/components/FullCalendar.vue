@@ -26,69 +26,75 @@
         />
       </div>
     </div>
-  </template>
+</template>
+
+<script setup lang="ts">
+import FullCalendar from '@fullcalendar/vue3';
+import { ref, onMounted, nextTick } from 'vue';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+
+let eventGuid = 0;
+
+const todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
+
+const calendarOptions = ref({
+  plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+  headerToolbar: {
+    left: 'prev,next today',
+    center: 'title',
+    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+  },
+  initialView: 'timeGridWeek',
+  slotMinTime: '06:00:00',
+  slotMaxTime: '22:00:00',
+  editable: true,
+  selectable: true,
+  selectMirror: true,
+  dayMaxEvents: true,
+  weekends: true,
+  events: [
   
-  <script setup lang="ts">
-  import FullCalendar from '@fullcalendar/vue3';
-  import { ref } from 'vue';
-  import dayGridPlugin from '@fullcalendar/daygrid';
-  import timeGridPlugin from '@fullcalendar/timegrid';
-  import interactionPlugin from '@fullcalendar/interaction';
-  
-  let eventGuid = 0;
-  
-  const todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
-  
-  const calendarOptions = ref({
-    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-    headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay'
-    },
-    initialView: 'timeGridWeek',
-    slotMinTime: '06:00:00',
-    slotMaxTime: '22:00:00',
-    editable: true,
-    selectable: true,
-    selectMirror: true,
-    dayMaxEvents: true,
-    weekends: true,
-    events: [
-      { id: createEventId(), title: 'All-day event', start: todayStr, allDay: true },
-      { id: createEventId(), title: 'Timed event', start: `${todayStr}T12:00:00` }
-    ],
-    eventClick: function(clickInfo) {
-      if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-        clickInfo.event.remove();
-      }
-    },
-    dateClick: function(info) {
-      let title = prompt('Please enter a new title for your event:');
-      if (title) {
-        info.calendar.addEvent({
-          id: createEventId(),
-          title,
-          start: info.date,
-          allDay: info.allDay
-        });
-      }
+  ],
+  eventClick: function(clickInfo) {
+    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+      clickInfo.event.remove();
     }
+  },
+  dateClick: function(info) {
+    let title = prompt('Please enter a new title for your event:');
+    if (title) {
+      info.calendar.addEvent({
+        id: createEventId(),
+        title,
+        start: info.date,
+        allDay: info.allDay
+      });
+    }
+  }
+});
+
+const currentEvents = ref([]);
+
+// Use onMounted to ensure FullCalendar is initialized after the component is fully mounted
+onMounted(() => {
+  nextTick(() => {
+    // Ensures that the DOM is fully updated before accessing or manipulating it
+    // Any further initialization that requires the updated DOM should go here
   });
-  
-  const currentEvents = ref([]);
-  
-  function handleEvents(events) {
-    currentEvents.value = events;
-  }
-  
-  // Helper function to generate event IDs
-  function createEventId() {
-    return String(eventGuid++);
-  }
-  </script>
-  
-  <style lang="css">
-  /* Your CSS styles here */
-  </style>
-  
+});
+
+function handleEvents(events) {
+  currentEvents.value = events;
+}
+
+// Helper function to generate event IDs
+function createEventId() {
+  return String(eventGuid++);
+}
+</script>
+
+<style lang="css">
+/* Your CSS styles here */
+</style>
