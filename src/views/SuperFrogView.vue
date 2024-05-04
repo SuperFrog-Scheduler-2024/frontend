@@ -4,9 +4,6 @@
         <div v-if="isLoading">Loading...</div>
         <div id="spiritdirector-view" v-else-if="isLoggedIn">
             <TabView v-model:activeIndex="activeTab">
-                <TabPanel header="View Students">
-                    <p>Content for View Students tab goes here</p>
-                </TabPanel>
                 <TabPanel header="View Requests">
                     <div id="request-tab">
                         <h3>Requests</h3>
@@ -42,8 +39,8 @@
                         </div>
                     </div>
                 </TabPanel>
-                <TabPanel header="Calendar">
-                    <p>Content for Calendar tab goes here</p>
+                    <TabPanel header="Calendar">
+                        <FullCalendar />
                 </TabPanel>
                 <TabPanel header="Reports">
                     <p>Content for Reports tab goes here</p>
@@ -57,6 +54,10 @@
 </template>
 
 <script setup lang="ts">
+
+
+
+
 import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import { useAuthStore } from '../stores/auth';
@@ -68,7 +69,7 @@ import Column from 'primevue/column';
 import Tag from 'primevue/tag';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
-
+import FullCalendar from '@/components/FullCalendar.vue';
 const router = useRouter();
 
 const authStore = useAuthStore();
@@ -83,6 +84,8 @@ const isLoading = ref(true);
 
 const activeTab = ref(0);
 const cancelDialogOpen = ref(false);
+const backendApiUrl = import.meta.env.VITE_API_URL;
+
 
 onMounted(async () => {
     await authStore.getUser();
@@ -96,6 +99,7 @@ const fetchRequests = async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/requests`);
         requests.value = response.data.data;
+        requests.value.filter((request: any) => request.status === 'Approved');
         toast.add({ severity: 'success', summary: 'Success', detail: 'Requests fetched successfully', life: 3000 });
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error fetching requests', life: 3000 });
@@ -134,4 +138,6 @@ watch(fetchRequests, () => { })
     display: flex;
     gap: 1rem;
 }
+
+
 </style>
