@@ -67,8 +67,8 @@
                         </div>
                     </div>
                 </TabPanel>
-                <TabPanel header="Calendar">
-                    <p>Content for Calendar tab goes here</p>
+                <TabPanel header="Availability Calendar">
+                    <FullCalendar />
                 </TabPanel>
                 <TabPanel header="Reports">
                     <p>Content for Reports tab goes here</p>
@@ -95,6 +95,7 @@ import Tag from 'primevue/tag';
 import InputText from 'primevue/inputtext';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
+import FullCalendar from '@/components/FullCalendar.vue';
 
 const router = useRouter();
 

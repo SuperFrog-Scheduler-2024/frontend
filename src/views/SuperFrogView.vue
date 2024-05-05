@@ -41,11 +41,14 @@
                         </div>
                     </div>
                 </TabPanel>
-                    <TabPanel header="Calendar">
+                    <TabPanel header="Availability Calendar">
                         <FullCalendar />
                 </TabPanel>
                 <TabPanel header="Reports">
                     <p>Content for Reports tab goes here</p>
+                </TabPanel>
+                <TabPanel header="Edit Profile">
+                    <UpdateStudent />
                 </TabPanel>
             </TabView>
         </div>
@@ -72,6 +75,10 @@ import Tag from 'primevue/tag';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import FullCalendar from '@/components/FullCalendar.vue';
+//Import UpdateStudent component
+import UpdateStudent from '@/views/UpdateStudent.vue';
+
+
 const router = useRouter();
 
 const authStore = useAuthStore();
