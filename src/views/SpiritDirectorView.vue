@@ -48,6 +48,7 @@
                                         <div class="button-group">
                                             <Button label="Approve" :disabled="rowData.status=='Approved'" @click="approveRequest(rowData)" />
                                             <Button label="Reject" :disabled="rowData.status=='Rejected'" @click="rejectRequest(rowData)" />
+                                            <Button label="Incomplete"/>
                                             <Button label="Edit" @click="router.push({ name: 'manage-id', params: { id: rowData.id } });" />
                                             <Button label="Cancel" :disabled="rowData.status.includes('Cancelled')" @click="openCancelDialog(rowData)" />
                                             <Dialog :visible="isCancelDialogOpen(rowData)" @hide="closeCancelDialog(rowData)" header="Cancel Request" modal>
