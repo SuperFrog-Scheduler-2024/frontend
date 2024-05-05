@@ -6,8 +6,14 @@ import ScrollTop from 'primevue/scrolltop';
 import Toast from 'primevue/toast';
 import ConfirmDialog from 'primevue/confirmdialog';
 import Sidebar from 'primevue/sidebar';
+import { useAuthStore } from './stores/auth';
+import { storeToRefs } from 'pinia'
 
+
+const auth = useAuthStore();
 const sideBarOpen = ref(false);
+const { token, user } = storeToRefs(auth)
+
 </script>
 
 <template>
@@ -28,10 +34,11 @@ const sideBarOpen = ref(false);
                 <RouterLink to="/range" activeClass="active">Range</RouterLink>
                 <RouterLink to="/request" activeClass="active">Request</RouterLink>
                 <RouterLink to="/manage" activeClass="active">Manage</RouterLink>
+                <RouterLink to="/login" v-if="token===''" activeClass="active">Login</RouterLink>
                 <Button icon="pi pi-user" text raised rounded aria-label="User" @click="sideBarOpen=true" />
                 <Sidebar v-model:visible="sideBarOpen" header="Account" position="right">
-                    <RouterLink to="/spiritdirector" activeClass="active">SpiritDirector</RouterLink>
-                    <RouterLink to="/superfrog" activeClass="active">SuperFrog</RouterLink>
+                    <RouterLink to="/spiritdirector" v-if="token==='1'" activeClass="active">SpiritDirector</RouterLink>
+                    <RouterLink to="/superfrog" v-if="token==='2'" activeClass="active">SuperFrog</RouterLink>
                 </Sidebar>
             </nav>
         </div>

@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue';
-import axios from 'axios';
+
 import { defineStore } from 'pinia';
 
 const backendApiUrl = import.meta.env.VITE_API_URL;
@@ -7,7 +7,7 @@ const backendApiUrl = import.meta.env.VITE_API_URL;
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         token: '',
-        user: {} as any,
+        user: JSON.parse(localStorage.getItem('currentUser') || '{}'),
     }),
     getters: {
         isLoggedIn: (state) => !!state.token,
@@ -16,15 +16,31 @@ export const useAuthStore = defineStore('auth', {
     },
     actions: {
         async getToken() {
-            // Simulate token retrieval
-            const data = { data: { token: '123' } };
-            this.token = data.data.token;
+            
         },
         async getUser() {
-            this.getToken(); // Assuming synchronous token retrieval
-            // Simulate user retrieval
-            const data = { data: { user: { name: 'John Doe', email: 'lemon@john.com' } } };
-            this.user = data.data.user;
+
+        },
+        login(username: string, password: string){
+            
+            const user = btoa(username);
+            const pass = btoa(password);
+            // console.log(user);
+            if ('c3Bpcml0' === user && 'cGFzc3dvcmQ=' === pass){ //user: spirit // password: password
+                this.user = "spiritdirector";
+                this.token = '1';
+                
+            }
+            if ("c3VwZXJmcm9n" === user && "cGFzc3dvcmQ=" === pass){ //user:superfrog // password: password
+                this.user = "superfrog";
+                this.token = '2';
+                
+            }
+        },
+        logout() {
+            this.user = '{}';
+            this.token = '';
+            localStorage.removeItem('user');
         }
     }
 });

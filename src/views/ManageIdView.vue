@@ -145,7 +145,7 @@ const userEmail = ref(authStore.userEmail);
 const isLoading = ref(true);
 
 onMounted(async () => {
-    await authStore.getUser();
+    // await authStore.getUser();
     isLoggedIn.value = authStore.isLoggedIn;
     userName.value = authStore.userName;
     userEmail.value = authStore.userEmail;
