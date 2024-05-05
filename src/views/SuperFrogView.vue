@@ -8,6 +8,8 @@
                     <div id="request-tab">
                         <h3>Requests</h3>
                         <div class="group">
+                            <InputText placeholder="Search" id="searchInput" />
+                            <Button icon="pi pi-search" @click="searchRequests" />
                             <Button label="Fetch New Requests" @click="fetchRequests" />
                         </div>
                         <div id="request-table">
@@ -107,6 +109,18 @@ const fetchRequests = async () => {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/requests`);
         requests.value = response.data.data;
         requests.value.filter((request: any) => request.status === 'Approved');
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Requests fetched successfully', life: 3000 });
+    } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Error fetching requests', life: 3000 });
+    }
+};
+
+const searchRequests = async () => {
+    const search = (document.querySelector('searchInput') as HTMLInputElement)?.value;
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/requests`);
+        requests.value = response.data.data;
+        requests.value = requests.value.filter((request) => request.eventTitle.includes(search));
         toast.add({ severity: 'success', summary: 'Success', detail: 'Requests fetched successfully', life: 3000 });
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error fetching requests', life: 3000 });

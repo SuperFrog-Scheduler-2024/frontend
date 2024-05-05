@@ -25,6 +25,8 @@
                     <div id="request-tab">
                         <h3>Requests</h3>
                         <div class="group">
+                            <InputText placeholder="Search" id="searchInput" />
+                            <Button icon="pi pi-search" @click="searchRequests" />
                             <Button label="Fetch New Requests" @click="fetchRequests" />
                             <Button label="Add a Request" @click="router.push({ name: 'request' })" />
                         </div>
@@ -48,6 +50,7 @@
                                         <div class="button-group">
                                             <Button label="Approve" :disabled="rowData.status=='Approved'" @click="approveRequest(rowData)" />
                                             <Button label="Reject" :disabled="rowData.status=='Rejected'" @click="rejectRequest(rowData)" />
+                                            <Button label="Incomplete"/>
                                             <Button label="Edit" @click="router.push({ name: 'manage-id', params: { id: rowData.id } });" />
                                             <Button label="Cancel" :disabled="rowData.status.includes('Cancelled')" @click="openCancelDialog(rowData)" />
                                             <Dialog :visible="isCancelDialogOpen(rowData)" @hide="closeCancelDialog(rowData)" header="Cancel Request" modal>
@@ -89,6 +92,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import Tag from 'primevue/tag';
+import InputText from 'primevue/inputtext';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import FullCalendar from '@/components/FullCalendar.vue';
@@ -137,6 +141,18 @@ const fetchRequests = async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/requests`);
         requests.value = response.data.data;
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Requests fetched successfully', life: 3000 });
+    } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Error fetching requests', life: 3000 });
+    }
+};
+
+const searchRequests = async () => {
+    const search = (document.querySelector('searchInput') as HTMLInputElement)?.value;
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/requests`);
+        requests.value = response.data.data;
+        requests.value = requests.value.filter((request) => request.eventTitle.includes(search));
         toast.add({ severity: 'success', summary: 'Success', detail: 'Requests fetched successfully', life: 3000 });
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error fetching requests', life: 3000 });
