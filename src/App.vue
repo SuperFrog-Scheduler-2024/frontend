@@ -39,6 +39,7 @@ const { token, user } = storeToRefs(auth)
                 <Sidebar v-model:visible="sideBarOpen" header="Account" position="right">
                     <RouterLink to="/spiritdirector" v-if="token==='1'" activeClass="active">SpiritDirector</RouterLink>
                     <RouterLink to="/superfrog" v-if="token==='2'" activeClass="active">SuperFrog</RouterLink>
+                    <Button v-if="token!==''" @click="auth.logout()">Logout</Button>
                 </Sidebar>
             </nav>
         </div>
